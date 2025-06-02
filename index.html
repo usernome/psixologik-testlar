@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Psixologik Portal</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding-bottom: 70px;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        .nav-menu {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        .nav-item {
+            text-align: center;
+            flex: 1;
+            padding: 8px 4px;
+            cursor: pointer;
+            color: #666;
+            font-size: 0.9rem;
+            touch-action: manipulation;
+        }
+        .nav-item.active {
+            color: #007bff;
+        }
+        .nav-item i {
+            display: block;
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        .section {
+            display: none;
+            padding: 20px;
+            margin-bottom: 60px;
+        }
+        .section.active {
+            display: block;
+        }
+        .section {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px;
+            margin-bottom: 60px;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .test-card {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+        }
+        .test-container {
+            display: none;
+        }
+        .test-container.active {
+            display: block;
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .answer-option {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .answer-option:hover {
+            background: #f0f0f0;
+        }
+        .result {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: #e8f5e9;
+        }
+        .user-info, .test-results, .recommendations {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .result-card {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+
+        .alert {
+            padding: 15px;
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            color: #721c24;
+            margin-bottom: 15px;
+        }
+        .messenger-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            background: #fff;
+            border: 1px solid #ddd;
+            min-height: 50px;
+        }
+        .telegram-btn {
+            background: #0088cc;
+            border: none;
+        }
+        .facebook-btn {
+            background: #3b5998;
+            border: none;
+        }
+        .messenger-btn img {
+            width: 24px;
+            height: 24px;
+        }
+        .zoom-btn {
+            background: #2D8CFF;
+            border: none;
+            margin-bottom: 10px;
+            color: white;
+        }
+        @media (max-width: 380px) {
+            body {
+                font-size: 14px;
+            }
+            .section {
+                padding: 10px;
+            }
+            .nav-item {
+                font-size: 0.8rem;
+            }
+            .nav-item i {
+                font-size: 18px;
+            }
+            h2 {
+                font-size: 1.5rem;
+            }
+            h3 {
+                font-size: 1.2rem;
+            }
+            .messenger-btn img {
+                width: 20px;
+                height: 20px;
+            }
+        }
+        input, select, button {
+            font-size: 16px;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="section active" id="profile">
+        <h2>Profil</h2>
+        <form id="regForm">
+            <div class="form-group">
+                <label for="name">Ism</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Yosh</label>
+                <input type="number" id="age" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Jins</label>
+                <select id="gender" required>
+                    <option value="male">Erkak</option>
+                    <option value="female">Ayol</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="profession">Kasb</label>
+                <input type="text" id="profession" required>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" required>
+                    Maxfiylik shartlariga roziman
+                </label>
+            </div>
+            <button type="submit" class="btn">Ro'yxatdan o'tish</button>
+        </form>
+    </div>
+
+    <div class="section" id="tests">
+        <h2>Testlar</h2>
+        <div class="test-card">
+            <h3>Stress darajasi testi</h3>
+            <button class="btn test-toggle" onclick="toggleTest('stressTestContainer', this)">Testni boshlash</button>
+            <div id="stressTestContainer" class="test-container">
+                <div id="questionContainer"></div>
+                <div id="testResult" class="result"></div>
+            </div>
+        </div>
+        <div class="test-card">
+            <h3>Depressiya testi</h3>
+            <button class="btn test-toggle" onclick="toggleTest('depressionTestContainer', this)">Testni boshlash</button>
+            <div id="depressionTestContainer" class="test-container">
+                <div id="depressionQuestionContainer"></div>
+                <div id="depressionTestResult" class="result"></div>
+            </div>
+        </div>
+        <div class="test-card">
+            <h3>O'ziga baho testi</h3>
+            <button class="btn test-toggle" onclick="toggleTest('selfEstTestContainer', this)">Testni boshlash</button>
+            <div id="selfEstTestContainer" class="test-container">
+                <div id="selfEstQuestionContainer"></div>
+                <div id="selfEstTestResult" class="result"></div>
+            </div>
+        </div>
+        <div class="test-card">
+            <h3>Emotsional intellekt testi</h3>
+            <button class="btn test-toggle" onclick="toggleTest('emotionalIntelligenceTestContainer', this)">Testni boshlash</button>
+            <div id="emotionalIntelligenceTestContainer" class="test-container">
+                <div id="eiQuestionContainer"></div>
+                <div id="eiTestResult" class="result"></div>
+            </div>
+        </div>
+        <div class="test-card">
+            <h3>MBTI testi</h3>
+            <button class="btn test-toggle" onclick="toggleTest('mbtiTestContainer', this)">Testni boshlash</button>
+            <div id="mbtiTestContainer" class="test-container">
+                <div id="mbtiQuestionContainer"></div>
+                <div id="mbtiTestResult" class="result"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="analysis">
+        <h2>Tahlil</h2>
+        <div id="results-chart">
+            <!-- Charts will be inserted here -->
+        </div>
+        <div class="recommendations">
+            <h3>Tavsiyalar</h3>
+            <ul>
+                <li>Kunlik meditatsiya</li>
+                <li>Nafas mashqlari</li>
+                <li>Jismoniy faollik</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section" id="consultation">
+        <h2>Maslahat</h2>
+        <a href="https://t.me/your_telegram_bot" target="_blank" class="btn messenger-btn telegram-btn">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/512px-Telegram_logo.svg.png" alt="Telegram">
+            Telegram orqali maslahat
+        </a>
+        <a href="https://m.me/your_facebook_page" target="_blank" class="btn messenger-btn facebook-btn">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/512px-2021_Facebook_icon.svg.png" alt="Facebook">
+            Facebook Messenger orqali maslahat
+        </a>
+        <a href="https://zoom.us/j/your_meeting_id" target="_blank" class="btn messenger-btn zoom-btn">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Zoom_Communications_Logo.svg/512px-Zoom_Communications_Logo.svg.png" alt="Zoom">
+            Zoom orqali maslahat
+        </a>
+    </div>
+
+    <nav class="nav-menu">
+        <div class="nav-item active" data-section="profile">
+            <i class="material-icons">person</i>
+            <span>Profil</span>
+        </div>
+        <div class="nav-item" data-section="tests">
+            <i class="material-icons">quiz</i>
+            <span>Testlar</span>
+        </div>
+        <div class="nav-item" data-section="analysis">
+            <i class="material-icons">analytics</i>
+            <span>Tahlil</span>
+        </div>
+        <div class="nav-item" data-section="consultation">
+            <i class="material-icons">chat</i>
+            <span>Maslahat</span>
+        </div>
+    </nav>
+
+    <script>
+        // Add this at the start of your script section
+        document.addEventListener('click', function(e) {
+            // Prevent default behavior for navigation links
+            if (e.target.tagName === 'A' && e.target.getAttribute('target') === '_blank') {
+                e.preventDefault();
+                window.location.href = e.target.href;
+            }
+        });
+
+        // For messenger links in consultation section
+        document.querySelectorAll('.messenger-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = this.href;
+            });
+        });
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                // Remove active class from all items and sections
+                document.querySelectorAll('.nav-item, .section').forEach(el => {
+                    el.classList.remove('active');
+                });
+                
+                // Add active class to clicked item
+                item.classList.add('active');
+                
+                // Show corresponding section
+                const sectionId = item.getAttribute('data-section');
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+
+        // Update form submission handler
+        document.getElementById('regForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userData = {
+                name: document.getElementById('name').value,
+                age: document.getElementById('age').value,
+                gender: document.getElementById('gender').value,
+                profession: document.getElementById('profession').value,
+                registeredAt: new Date().toISOString()
+            };
+            localStorage.setItem('userData', JSON.stringify(userData));
+            alert('Ro\'yxatdan o\'tish muvaffaqiyatli yakunlandi');
+        });
+
+        // Update saveTestResult function
+        function saveTestResult(testType, result, score) {
+            const results = JSON.parse(localStorage.getItem('testResults') || '[]');
+            // Remove old result of the same type if exists
+            const filteredResults = results.filter(r => r.testType !== testType);
+            // Add new result
+            filteredResults.push({
+                testType,
+                result,
+                score,
+                date: new Date().toISOString()
+            });
+            localStorage.setItem('testResults', JSON.stringify(filteredResults));
+            // Update analysis immediately
+            updateAnalysis();
+            // Also update if analysis section is visible
+            if (document.getElementById('analysis').classList.contains('active')) {
+                updateAnalysis();
+            }
+        }
+
+        // Add auto-update functionality
+        function setupAnalysisAutoUpdate() {
+            // Watch for changes in localStorage
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'testResults') {
+                    updateAnalysis();
+                }
+            });
+
+            // Update analysis when switching to analysis tab
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    if (item.getAttribute('data-section') === 'analysis') {
+                        updateAnalysis();
+                    }
+                });
+            });
+        }
+
+        // Call setup function when page loads
+        document.addEventListener('DOMContentLoaded', setupAnalysisAutoUpdate);
+
+        // Basic form handling
+        document.getElementById('regForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Handle form submission
+            alert('Ro\'yxatdan o\'tish muvaffaqiyatli yakunlandi');
+        });
+
+        const stressQuestions = [
+            {
+                question: "So'nggi bir oyda qanchalik tez-tez asabiylashdingiz?",
+                options: ["Umuman yo'q", "Ba'zan", "Ko'pincha", "Deyarli har doim"]
+            },
+            {
+                question: "Uyqu bilan bog'liq muammolar bormi?",
+                options: ["Yo'q", "Ba'zan", "Ko'pincha", "Har doim"]
+            },
+            {
+                question: "O'zingizni charchagan his qilasizmi?",
+                options: ["Umuman yo'q", "Ba'zan", "Ko'pincha", "Doimiy ravishda"]
+            },
+            {
+                question: "Bosh og'rig'i bezovta qiladimi?",
+                options: ["Yo'q", "Ba'zan", "Tez-tez", "Deyarli har kuni"]
+            },
+            {
+                question: "Diqqatingizni jamlashda qiyinchilik sezyapsizmi?",
+                options: ["Yo'q", "Ba'zan", "Ko'pincha", "Har doim"]
+            },
+            {
+                question: "Hayotingizdan qoniqish darajangiz qanday?",
+                options: ["To'liq qoniqaman", "Yaxshi", "Qisman", "Qoniqmayman"]
+            },
+            {
+                question: "Kelajak haqida xavotirlanasizmi?",
+                options: ["Yo'q", "Ba'zan", "Ko'pincha", "Doimiy ravishda"]
+            },
+            {
+                question: "Kundalik vazifalarni bajarishda qiyinchilik sezyapsizmi?",
+                options: ["Yo'q", "Ba'zan", "Ko'pincha", "Har doim"]
+            },
+            {
+                question: "Atrofdagilar bilan munosabatingiz qanday?",
+                options: ["Juda yaxshi", "Yaxshi", "Qoniqarli", "Yomon"]
+            },
+            {
+                question: "Jismoniy faollik bilan shug'ullanasizmi?",
+                options: ["Muntazam", "Ba'zan", "Kamdan-kam", "Umuman yo'q"]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = [];
+
+        function toggleTest(containerId, button) {
+            const container = document.getElementById(containerId);
+            if (container.classList.contains('active')) {
+                container.classList.remove('active');
+                button.textContent = 'Testni boshlash';
+            } else {
+                // Close all other test containers first
+                document.querySelectorAll('.test-container').forEach(cont => {
+                    cont.classList.remove('active');
+                });
+                document.querySelectorAll('.test-toggle').forEach(btn => {
+                    btn.textContent = 'Testni boshlash';
+                });
+                
+                container.classList.add('active');
+                button.textContent = 'Yopish';
+                
+                // Start the appropriate test
+                if (containerId === 'stressTestContainer') {
+                    startStressTest();
+                } else if (containerId === 'depressionTestContainer') {
+                    startDepressionTest();
+                } else if (containerId === 'selfEstTestContainer') {
+                    startSelfEstTest();
+                } else if (containerId === 'emotionalIntelligenceTestContainer') {
+                    startEITest();
+                } else if (containerId === 'mbtiTestContainer') {
+                    startMBTITest();
+                }
+            }
+        }
+
+        function startStressTest() {
+            currentQuestion = 0;
+            answers = [];
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = stressQuestions[currentQuestion];
+            let html = `
+                <div class="question">
+                    <h4>${question.question}</h4>
+                    ${question.options.map((option, index) => `
+                        <label class="answer-option">
+                            <input type="radio" name="answer" value="${index}">
+                            ${option}
+                        </label>
+                    `).join('')}
+                    <button class="btn" onclick="nextQuestion()">Keyingisi</button>
+                </div>
+            `;
+            document.getElementById('questionContainer').innerHTML = html;
+        }
+
+        function nextQuestion() {
+            const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+            if (!selectedAnswer) {
+                alert('Iltimos, javobni tanlang');
+                return;
+            }
+            
+            answers.push(parseInt(selectedAnswer.value));
+            
+            if (currentQuestion < stressQuestions.length - 1) {
+                currentQuestion++;
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            const totalScore = answers.reduce((sum, answer) => sum + answer, 0);
+            let result = '';
+            let recommendations = '';
+
+            if (totalScore <= 10) {
+                result = 'Stress darajasi past';
+                recommendations = 'Siz yaxshi holatdasiz. Kundalik faoliyatingizni davom ettiring.';
+            } else if (totalScore <= 20) {
+                result = 'O\'rtacha stress darajasi';
+                recommendations = 'Stress boshqarish usullarini qo\'llash tavsiya etiladi: meditatsiya, sport va dam olish.';
+            } else if (totalScore <= 30) {
+                result = 'Yuqori stress darajasi';
+                recommendations = 'Psixolog bilan maslahatlashish tavsiya etiladi. Stress darajangiz yuqori.';
+            } else {
+                result = 'Juda yuqori stress darajasi';
+                recommendations = 'Zudlik bilan mutaxassisga murojaat qiling!';
+            }
+
+            document.getElementById('questionContainer').style.display = 'none';
+            document.getElementById('testResult').style.display = 'block';
+            document.getElementById('testResult').innerHTML = `
+                <h3>${result}</h3>
+                <p>${recommendations}</p>
+                <button class="btn" onclick="resetTest()">Qayta boshlash</button>
+            `;
+            saveTestResult('stress', result, totalScore);
+        }
+
+        function resetTest() {
+            currentQuestion = 0;
+            answers = [];
+            document.getElementById('questionContainer').style.display = 'block';
+            document.getElementById('testResult').style.display = 'none';
+            showQuestion();
+        }
+
+        const depressionQuestions = [
+            {
+                question: "So'nggi ikki hafta davomida ko'ngilsizlik, tushkunlik yoki umidsizlik his qildingizmi?",
+                options: ["Umuman yo'q", "Ba'zi kunlari", "Ko'p kunlari", "Deyarli har kuni"]
+            },
+            {
+                question: "Kundalik mashg'ulotlarga qiziqish yoki zavq olish kamayganmi?",
+                options: ["Yo'q", "Ozgina", "Sezilarli", "Juda kam qolgan"]
+            },
+            {
+                question: "Uyqu bilan bog'liq muammolar (ko'p uxlash yoki uxlay olmaslik)?",
+                options: ["Yo'q", "Ba'zan", "Ko'pincha", "Har doim"]
+            },
+            {
+                question: "Charchoq yoki energiya yetishmasligi?",
+                options: ["Yo'q", "Ba'zan", "Ko'pincha", "Doimiy"]
+            },
+            {
+                question: "Ishtaha o'zgarishi (ortishi yoki kamayishi)?",
+                options: ["O'zgarmagan", "Ozgina", "Sezilarli", "Keskin"]
+            },
+            {
+                question: "O'zingizdan yoki oilangizdan norozilik his qilasizmi?",
+                options: ["Yo'q", "Ba'zan", "Ko'pincha", "Har doim"]
+            },
+            {
+                question: "Diqqatni jamlashda qiyinchilik?",
+                options: ["Yo'q", "Ba'zan", "Ko'pincha", "Doimiy"]
+            },
+            {
+                question: "Juda sekin harakat qilish yoki aksincha bezovtalik?",
+                options: ["Yo'q", "Ba'zan", "Ko'pincha", "Har doim"]
+            },
+            {
+                question: "O'lim haqidagi fikrlar yoki o'ziga zarar yetkazish?",
+                options: ["Yo'q", "Ba'zan", "Tez-tez", "Doimiy"]
+            },
+            {
+                question: "Kelajakka umid bilan qaraysizmi?",
+                options: ["Ha, albatta", "Umuman olganda", "Unchalik emas", "Umuman yo'q"]
+            }
+        ];
+
+        let depressionCurrentQuestion = 0;
+        let depressionAnswers = [];
+
+        function startDepressionTest() {
+            depressionCurrentQuestion = 0;
+            depressionAnswers = [];
+            showDepressionQuestion();
+        }
+
+        function showDepressionQuestion() {
+            const question = depressionQuestions[depressionCurrentQuestion];
+            let html = `
+                <div class="question">
+                    <h4>${question.question}</h4>
+                    ${question.options.map((option, index) => `
+                        <label class="answer-option">
+                            <input type="radio" name="depression-answer" value="${index}">
+                            ${option}
+                        </label>
+                    `).join('')}
+                    <button class="btn" onclick="nextDepressionQuestion()">Keyingisi</button>
+                </div>
+            `;
+            document.getElementById('depressionQuestionContainer').innerHTML = html;
+        }
+
+        function nextDepressionQuestion() {
+            const selectedAnswer = document.querySelector('input[name="depression-answer"]:checked');
+            if (!selectedAnswer) {
+                alert('Iltimos, javobni tanlang');
+                return;
+            }
+            
+            depressionAnswers.push(parseInt(selectedAnswer.value));
+            
+            if (depressionCurrentQuestion < depressionQuestions.length - 1) {
+                depressionCurrentQuestion++;
+                showDepressionQuestion();
+            } else {
+                showDepressionResult();
+            }
+        }
+
+        function showDepressionResult() {
+            const totalScore = depressionAnswers.reduce((sum, answer) => sum + answer, 0);
+            let result = '';
+            let recommendations = '';
+
+            if (totalScore <= 10) {
+                result = 'Depressiya belgilari yo\'q';
+                recommendations = 'Sizning ruhiy holatingiz barqaror. Kundalik faoliyatingizni davom ettiring.';
+            } else if (totalScore <= 20) {
+                result = 'Yengil depressiya belgilari';
+                recommendations = 'O\'z-o\'ziga yordam usullarini qo\'llash tavsiya etiladi: jismoniy faollik, ijobiy muloqot, dam olish.';
+            } else if (totalScore <= 30) {
+                result = 'O\'rtacha depressiya belgilari';
+                recommendations = 'Psixolog bilan maslahatlashish tavsiya etiladi. Professional yordam olish foydali bo\'lishi mumkin.';
+            } else {
+                result = 'Og\'ir depressiya belgilari';
+                recommendations = 'Zudlik bilan psixolog yoki psixiatr bilan bog\'laning. Bu holatda professional yordam juda muhim!';
+            }
+
+            document.getElementById('depressionQuestionContainer').style.display = 'none';
+            document.getElementById('depressionTestResult').style.display = 'block';
+            document.getElementById('depressionTestResult').innerHTML = `
+                <h3>${result}</h3>
+                <p>${recommendations}</p>
+                <button class="btn" onclick="resetDepressionTest()">Qayta boshlash</button>
+            `;
+            saveTestResult('depression', result, totalScore);
+        }
+
+        function resetDepressionTest() {
+            depressionCurrentQuestion = 0;
+            depressionAnswers = [];
+            document.getElementById('depressionQuestionContainer').style.display = 'block';
+            document.getElementById('depressionTestResult').style.display = 'none';
+            showDepressionQuestion();
+        }
+
+        const selfEstQuestions = [
+            {
+                question: "Men o'zimni qimmatli inson deb bilaman",
+                options: ["Umuman yo'q", "Ba'zan", "Ko'pincha", "Har doim"]
+            },
+            {
+                question: "Muvaffaqiyatsizliklardan keyin o'zimni tez o'nglay olaman",
+                options: ["Umuman yo'q", "Qisman", "Yaxshi", "Juda yaxshi"]
+            },
+            {
+                question: "Yangi vazifalarni bajarishda o'zimga ishonaman",
+                options: ["Ishonmayman", "Ozgina", "Yetarlicha", "To'liq ishonaman"]
+            },
+            {
+                question: "O'z fikrlarimni erkin ifoda eta olaman",
+                options: ["Qiynalaman", "Ba'zan", "Ko'pincha", "Har doim"]
+            },
+            {
+                question: "Men o'z tashqi ko'rinishimdan mamnunman",
+                options: ["Umuman yo'q", "Qisman", "Ko'pincha", "To'liq"]
+            },
+            {
+                question: "Men o'z qarorlarimga ishonamanmi?",
+                options: ["Ishonmayman", "Ba'zan", "Ko'pincha", "Har doim"]
+            },
+            {
+                question: "Boshqalarning tanqidini qanday qabul qilaman?",
+                options: ["Juda yomon", "Qiyin", "Normal", "Yaxshi"]
+            },
+            {
+                question: "Men o'z maqsadlarimga erishishga qodirman",
+                options: ["Ishonmayman", "Ba'zan", "Ko'pincha", "To'liq ishonaman"]
+            },
+            {
+                question: "Men o'zimning kamchiliklarimni qabul qila olaman",
+                options: ["Umuman yo'q", "Qisman", "Yaxshi", "To'liq"]
+            },
+            {
+                question: "Men o'zimni boshqalar bilan taqqoslamayman",
+                options: ["Doim taqqoslayman", "Ko'pincha", "Ba'zan", "Hech qachon"]
+            }
+        ];
+
+        let selfEstCurrentQuestion = 0;
+        let selfEstAnswers = [];
+
+        function startSelfEstTest() {
+            selfEstCurrentQuestion = 0;
+            selfEstAnswers = [];
+            showSelfEstQuestion();
+        }
+
+        function showSelfEstQuestion() {
+            const question = selfEstQuestions[selfEstCurrentQuestion];
+            let html = `
+                <div class="question">
+                    <h4>${question.question}</h4>
+                    ${question.options.map((option, index) => `
+                        <label class="answer-option">
+                            <input type="radio" name="selfest-answer" value="${index}">
+                            ${option}
+                        </label>
+                    `).join('')}
+                    <button class="btn" onclick="nextSelfEstQuestion()">Keyingisi</button>
+                </div>
+            `;
+            document.getElementById('selfEstQuestionContainer').innerHTML = html;
+        }
+
+        function nextSelfEstQuestion() {
+            const selectedAnswer = document.querySelector('input[name="selfest-answer"]:checked');
+            if (!selectedAnswer) {
+                alert('Iltimos, javobni tanlang');
+                return;
+            }
+            
+            selfEstAnswers.push(parseInt(selectedAnswer.value));
+            
+            if (selfEstCurrentQuestion < selfEstQuestions.length - 1) {
+                selfEstCurrentQuestion++;
+                showSelfEstQuestion();
+            } else {
+                showSelfEstResult();
+            }
+        }
+
+        function showSelfEstResult() {
+            const totalScore = selfEstAnswers.reduce((sum, answer) => sum + answer, 0);
+            let result = '';
+            let recommendations = '';
+
+            if (totalScore <= 10) {
+                result = 'Past o\'ziga baho';
+                recommendations = 'O\'zingizga bo\'lgan ishonchni oshirish uchun psixolog bilan ishlash tavsiya etiladi.';
+            } else if (totalScore <= 20) {
+                result = 'O\'rtachadan past o\'ziga baho';
+                recommendations = 'O\'z-o\'zini rivojlantirish va ijobiy fikrlash ustida ishlash foydali bo\'ladi.';
+            } else if (totalScore <= 30) {
+                result = 'Yaxshi o\'ziga baho';
+                recommendations = 'Siz o\'zingizga yetarlicha baho berasiz. Bu holatni saqlab qolish uchun ishlashda davom eting.';
+            } else {
+                result = 'Yuqori o\'ziga baho';
+                recommendations = 'Sizning o\'ziga bahoyingiz yuqori. Bu ijobiy holat, lekin reallikni ham unutmang.';
+            }
+
+            document.getElementById('selfEstQuestionContainer').style.display = 'none';
+            document.getElementById('selfEstTestResult').style.display = 'block';
+            document.getElementById('selfEstTestResult').innerHTML = `
+                <h3>${result}</h3>
+                <p>${recommendations}</p>
+                <button class="btn" onclick="resetSelfEstTest()">Qayta boshlash</button>
+            `;
+            saveTestResult('selfEsteem', result, totalScore);
+        }
+
+        function resetSelfEstTest() {
+            selfEstCurrentQuestion = 0;
+            selfEstAnswers = [];
+            document.getElementById('selfEstQuestionContainer').style.display = 'block';
+            document.getElementById('selfEstTestResult').style.display = 'none';
+            showSelfEstQuestion();
+        }
+
+        const eiQuestions = [
+            {
+                question: "O'z his-tuyg'ularingizni qanchalik yaxshi tushunasiz?",
+                options: ["Umuman tushunmayman", "Qisman tushunaman", "Yaxshi tushunaman", "Juda yaxshi tushunaman"]
+            },
+            {
+                question: "Boshqalarning his-tuyg'ularini qanchalik tez anglay olasiz?",
+                options: ["Qiyin", "Ba'zan", "Ko'pincha", "Juda yaxshi"]
+            },
+            {
+                question: "Stressli vaziyatlarda o'zingizni nazorat qila olasizmi?",
+                options: ["Yo'q", "Ba'zan", "Ko'pincha", "Har doim"]
+            },
+            {
+                question: "Boshqalar bilan muloqotda empatiya ko'rsata olasizmi?",
+                options: ["Qiyin", "Ba'zan", "Ko'pincha", "Har doim"]
+            },
+            {
+                question: "Konflikt vaziyatlarni tinch yo'l bilan hal qila olasizmi?",
+                options: ["Yo'q", "Ba'zan", "Ko'pincha", "Har doim"]
+            },
+            {
+                question: "O'z xatolaringizni tan olish va kechirim so'ray olasizmi?",
+                options: ["Qiyin", "Ba'zan", "Ko'pincha", "Har doim"]
+            },
+            {
+                question: "Boshqalarning fikrlarini hurmat qilasizmi?",
+                options: ["Kamdan-kam", "Ba'zan", "Ko'pincha", "Har doim"]
+            },
+            {
+                question: "Jamoa ishida hamkorlik qila olasizmi?",
+                options: ["Qiyin", "O'rtacha", "Yaxshi", "Juda yaxshi"]
+            },
+            {
+                question: "Boshqalarni motivatsiya qila olasizmi?",
+                options: ["Yo'q", "Ba'zan", "Ko'pincha", "Har doim"]
+            },
+            {
+                question: "O'z emotsiyalaringizni ijobiy yo'naltirasizmi?",
+                options: ["Kamdan-kam", "Ba'zan", "Ko'pincha", "Har doim"]
+            }
+        ];
+
+        let eiCurrentQuestion = 0;
+        let eiAnswers = [];
+
+        function startEITest() {
+            eiCurrentQuestion = 0;
+            eiAnswers = [];
+            showEIQuestion();
+        }
+
+        function showEIQuestion() {
+            const question = eiQuestions[eiCurrentQuestion];
+            let html = `
+                <div class="question">
+                    <h4>${question.question}</h4>
+                    ${question.options.map((option, index) => `
+                        <label class="answer-option">
+                            <input type="radio" name="ei-answer" value="${index}">
+                            ${option}
+                        </label>
+                    `).join('')}
+                    <button class="btn" onclick="nextEIQuestion()">Keyingisi</button>
+                </div>
+            `;
+            document.getElementById('eiQuestionContainer').innerHTML = html;
+        }
+
+        function nextEIQuestion() {
+            const selectedAnswer = document.querySelector('input[name="ei-answer"]:checked');
+            if (!selectedAnswer) {
+                alert('Iltimos, javobni tanlang');
+                return;
+            }
+            
+            eiAnswers.push(parseInt(selectedAnswer.value));
+            
+            if (eiCurrentQuestion < eiQuestions.length - 1) {
+                eiCurrentQuestion++;
+                showEIQuestion();
+            } else {
+                showEIResult();
+            }
+        }
+
+        function showEIResult() {
+            const totalScore = eiAnswers.reduce((sum, answer) => sum + answer, 0);
+            let result = '';
+            let recommendations = '';
+
+            if (totalScore <= 10) {
+                result = 'Past emotsional intellekt';
+                recommendations = 'Emotsional intellektni rivojlantirish uchun psixolog bilan ishlash tavsiya etiladi.';
+            } else if (totalScore <= 20) {
+                result = 'O\'rtacha emotsional intellekt';
+                recommendations = 'Yaxshi, lekin rivojlantirish imkoniyatlari mavjud. Muloqot ko\'nikmalarini oshirish foydali bo\'ladi.';
+            } else if (totalScore <= 30) {
+                result = 'Yaxshi emotsional intellekt';
+                recommendations = 'Siz boshqalarning his-tuyg\'ularini yaxshi tushunasiz va boshqara olasiz.';
+            } else {
+                result = 'Yuqori emotsional intellekt';
+                recommendations = 'Ajoyib! Siz insonlarni tushunish va ular bilan muloqot qilishda kuchli qobiliyatga egasiz.';
+            }
+
+            document.getElementById('eiQuestionContainer').style.display = 'none';
+            document.getElementById('eiTestResult').style.display = 'block';
+            document.getElementById('eiTestResult').innerHTML = `
+                <h3>${result}</h3>
+                <p>${recommendations}</p>
+                <button class="btn" onclick="resetEITest()">Qayta boshlash</button>
+            `;
+            saveTestResult('emotionalIntelligence', result, totalScore);
+        }
+
+        function resetEITest() {
+            eiCurrentQuestion = 0;
+            eiAnswers = [];
+            document.getElementById('eiQuestionContainer').style.display = 'block';
+            document.getElementById('eiTestResult').style.display = 'none';
+            showEIQuestion();
+        }
+
+        const mbtiQuestions = [
+            {
+                question: "Yangi tanishlar bilan muloqot qilishni yoqtirasizmi?",
+                options: ["Ko'proq tinch muhitni afzal ko'raman", "Ba'zan", "Ko'pincha", "Har doim yangi tanishuvlarni izlayman"]
+            },
+            {
+                question: "Qaror qabul qilishda nimaga ko'proq e'tibor berasiz?",
+                options: ["Mantiqqa", "Ko'proq mantiqqa", "Ko'proq his-tuyg'uga", "His-tuyg'uga"]
+            },
+            {
+                question: "Rejalashtirish qanchalik muhim?",
+                options: ["Har doim rejalashtiraman", "Ko'pincha", "Ba'zan", "Rejasiz yashashni afzal ko'raman"]
+            },
+            {
+                question: "Guruh muhitida o'zingizni qanday his qilasiz?",
+                options: ["Noqulay", "Biroz noqulay", "Yaxshi", "Juda yaxshi"]
+            },
+            {
+                question: "Muammolarni hal qilishda qanday yondashuv tanlaysiz?",
+                options: ["Mantiqiy tahlil", "Ko'proq tahlil", "Ko'proq tajriba", "Intuitsiya"]
+            },
+            {
+                question: "Ishni qanday bajarishni afzal ko'rasiz?",
+                options: ["Aniq reja bilan", "Tartibli", "Erkin", "Spontan"]
+            },
+            {
+                question: "Energiyani qaerdan olasiz?",
+                options: ["Yolg'izlikdan", "Ko'proq yolg'izlikdan", "Ko'proq muloqotdan", "Muloqotdan"]
+            },
+            {
+                question: "Ma'lumotni qanday qabul qilasiz?",
+                options: ["Aniq faktlar", "Ko'proq faktlar", "Ko'proq g'oyalar", "Yangi g'oyalar"]
+            },
+            {
+                question: "Stressli vaziyatda qanday harakat qilasiz?",
+                options: ["Rejali", "Ko'proq rejali", "Ko'proq moslashuvchan", "Moslashuvchan"]
+            },
+            {
+                question: "Qarorlar qabul qilishda nimaga tayanasiz?",
+                options: ["Faktlarga", "Ko'proq faktlarga", "Ko'proq his-tuyg'uga", "His-tuyg'uga"]
+            }
+        ];
+
+        let mbtiCurrentQuestion = 0;
+        let mbtiAnswers = [];
+
+        function startMBTITest() {
+            mbtiCurrentQuestion = 0;
+            mbtiAnswers = [];
+            showMBTIQuestion();
+        }
+
+        function showMBTIQuestion() {
+            const question = mbtiQuestions[mbtiCurrentQuestion];
+            let html = `
+                <div class="question">
+                    <h4>${question.question}</h4>
+                    ${question.options.map((option, index) => `
+                        <label class="answer-option">
+                            <input type="radio" name="mbti-answer" value="${index}">
+                            ${option}
+                        </label>
+                    `).join('')}
+                    <button class="btn" onclick="nextMBTIQuestion()">Keyingisi</button>
+                </div>
+            `;
+            document.getElementById('mbtiQuestionContainer').innerHTML = html;
+        }
+
+        function nextMBTIQuestion() {
+            const selectedAnswer = document.querySelector('input[name="mbti-answer"]:checked');
+            if (!selectedAnswer) {
+                alert('Iltimos, javobni tanlang');
+                return;
+            }
+            
+            mbtiAnswers.push(parseInt(selectedAnswer.value));
+            
+            if (mbtiCurrentQuestion < mbtiQuestions.length - 1) {
+                mbtiCurrentQuestion++;
+                showMBTIQuestion();
+            } else {
+                showMBTIResult();
+            }
+        }
+
+        function calculateMBTIType(answers) {
+            const E = answers[0] + answers[3] + answers[6] > 6 ? 'E' : 'I';
+            const S = answers[1] + answers[4] + answers[7] > 6 ? 'S' : 'N';
+            const T = answers[2] + answers[5] + answers[8] > 6 ? 'T' : 'F';
+            const J = answers[3] + answers[6] + answers[9] > 6 ? 'J' : 'P';
+            return E + S + T + J;
+        }
+
+        function getMBTIDescription(type) {
+            const descriptions = {
+                'ISTJ': 'Mas\'uliyatli va tartibli. Mantiqiy fikrlaysiz va tashkiliy qobiliyatingiz kuchli.',
+                'ISFJ': 'G\'amxo\'r va sodiq. Boshqalarga yordam berishni yoqtirasiz.',
+                'INFJ': 'Ijodkor va g\'oyalarga boy. Chuqur his qilasiz va kelajakni ko\'ra olasiz.',
+                'INTJ': 'Strategik fikrlovchi. Mustaqil va analitik tafakkurga egasiz.',
+                'ISTP': 'Mohir ustaxona. Texnik va amaliy yechimlarni topishda kuchlisiz.',
+                'ISFP': 'San\'atkor va ijodkor. His-tuyg\'ularingizni san\'at orqali ifoda etasiz.',
+                'INFP': 'Mediator va idealist. Insonlar va g\'oyalarga sadoqatli.',
+                'INTP': 'Mantiqiy olim. Nazariy bilimlar va yangi g\'oyalarni sevasiz.',
+                'ESTP': 'Tadbirkor va faol. Tavakkalchi va tezkor qaror qabul qilasiz.',
+                'ESFP': 'Ko\'ngil ochuvchi. Hayotdan zavqlanishni va boshqalarni quvontirishni yoqtirasiz.',
+                'ENFP': 'Ilhomlantiruvchi. Yangi g\'oyalar va imkoniyatlarni izlaysiz.',
+                'ENTP': 'Innovator. Kreativ va bahs-munozarani yoqtirasiz.',
+                'ESTJ': 'Rahbar. Tashkilotchi va aniq maqsadlarga ega.',
+                'ESFJ': 'Konsul. Ijtimoiy va boshqalarga g\'amxo\'r.',
+                'ENFJ': 'Protagonist. Yetakchi va motivator.',
+                'ENTJ': 'Komandir. Strategik rejalashtirish va yetakchilikda kuchli.'
+            };
+            return descriptions[type] || 'Aniq natija olish uchun testni qayta topshiring.';
+        }
+
+        function showMBTIResult() {
+            const type = calculateMBTIType(mbtiAnswers);
+            const description = getMBTIDescription(type);
+
+            document.getElementById('mbtiQuestionContainer').style.display = 'none';
+            document.getElementById('mbtiTestResult').style.display = 'block';
+            document.getElementById('mbtiTestResult').innerHTML = `
+                <h3>Sizning MBTI tipingiz: ${type}</h3>
+                <p>${description}</p>
+                <button class="btn" onclick="resetMBTITest()">Qayta boshlash</button>
+            `;
+            saveTestResult('mbti', type, 0);
+        }
+
+        function resetMBTITest() {
+            mbtiCurrentQuestion = 0;
+            mbtiAnswers = [];
+            document.getElementById('mbtiQuestionContainer').style.display = 'block';
+            document.getElementById('mbtiTestResult').style.display = 'none';
+            showMBTIQuestion();
+        }
+
+        // Update analysis section with animation
+        function updateAnalysis() {
+            const analysisSection = document.getElementById('analysis');
+            analysisSection.style.opacity = '0';
+            
+            setTimeout(() => {
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                const testResults = JSON.parse(localStorage.getItem('testResults') || '[]');
+
+                if (!userData.name) {
+                    analysisSection.innerHTML = `
+                        <h2>Tahlil</h2>
+                        <div class="alert">
+                            Iltimos, avval ro'yxatdan o'ting
+                        </div>
+                    `;
+                    return;
+                }
+
+                const lastResults = {};
+                testResults.forEach(result => {
+                    lastResults[result.testType] = result;
+                });
+
+                let html = `
+                    <h2>Tahlil</h2>
+                    <div class="user-info">
+                        <h3>Foydalanuvchi ma'lumotlari</h3>
+                        <p><strong>Ism:</strong> ${userData.name}</p>
+                        <p><strong>Yosh:</strong> ${userData.age}</p>
+                        <p><strong>Jins:</strong> ${userData.gender === 'male' ? 'Erkak' : 'Ayol'}</p>
+                        <p><strong>Kasb:</strong> ${userData.profession}</p>
+                    </div>
+                    <div class="test-results">
+                        <h3>Test natijalari</h3>
+                `;
+
+                if (Object.keys(lastResults).length === 0) {
+                    html += '<p>Siz hali testlarni topshirmadingiz</p>';
+                } else {
+                    html += '<div class="results-grid">';
+                    Object.entries(lastResults).forEach(([type, result]) => {
+                        html += `
+                            <div class="result-card">
+                                <h4>${getTestName(type)}</h4>
+                                <p><strong>Natija:</strong> ${result.result}</p>
+                                <p><strong>Sana:</strong> ${new Date(result.date).toLocaleDateString()}</p>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                }
+
+                html += `
+                    </div>
+                    <div class="recommendations">
+                        <h3>Umumiy tavsiyalar</h3>
+                        ${generateRecommendations(lastResults)}
+                    </div>
+                `;
+
+                analysisSection.innerHTML = html;
+                // Add fade-in animation
+                analysisSection.style.transition = 'opacity 0.3s ease-in';
+                analysisSection.style.opacity = '1';
+            }, 300);
+        }
+
+        function getTestName(type) {
+            const names = {
+                stress: 'Stress testi',
+                depression: 'Depressiya testi',
+                selfEsteem: 'O\'ziga baho testi',
+                emotionalIntelligence: 'Emotsional intellekt testi',
+                mbti: 'MBTI testi'
+            };
+            return names[type] || type;
+        }
+
+        function generateRecommendations(results) {
+            let recommendations = '<ul>';
+            
+            if (results.stress && results.stress.score > 20) {
+                recommendations += '<li>Stress darajangizni pasaytirish uchun meditatsiya va sport bilan shug\'ullaning</li>';
+            }
+            
+            if (results.depression && results.depression.score > 20) {
+                recommendations += '<li>Psixolog bilan suhbat o\'tkazish tavsiya etiladi</li>';
+            }
+            
+            if (results.selfEsteem && results.selfEsteem.score < 20) {
+                recommendations += '<li>O\'ziga ishonchni oshirish bo\'yicha mashqlar bajaring</li>';
+            }
+
+            recommendations += `
+                <li>Kunlik meditatsiya</li>
+                <li>Nafas mashqlari</li>
+                <li>Jismoniy faollik</li>
+            </ul>`;
+
+            return recommendations;
+        }
+
+        // Add event listener to nav menu to update analysis
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                if (item.getAttribute('data-section') === 'analysis') {
+                    updateAnalysis();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
